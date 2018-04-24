@@ -1,3 +1,23 @@
+set nocompatible
+filetype off
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin('~/.vim.bundle/Vundle.vim')
+
+
+Plugin 'VundleVim/Vundle.vim'
+
+" 導入したいプラグインを以下に列挙
+" Plugin '[Github Author]/[Github repo]' の形式で記入
+Plugin 'mattn/emmet-vim'
+Plugin 'tomasr/molokai'
+Plugin 'Yggdroot/indentLine'
+Plugin 'Shougo/unite.vim'
+
+call vundle#end()
+filetype plugin indent on
+
 " setting
 "文字コードをUFT-8に設定
 set fenc=utf-8
@@ -40,6 +60,8 @@ set wildmode=list:longest
 " 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
+" スクロールするときに下が見えるようにする
+set scrolloff=5
 
 " Tab系
 " 不可視文字を可視化(タブが「▸-」と表示される)
@@ -66,7 +88,19 @@ set hlsearch
 " ESC連打でハイライト解除
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
 " カラースキーム
-"colorscheme koehler
+syntax on
+colorscheme molokai
+" 背景透過
+" テキストの背景
+highlight Normal ctermbg=none
+" テキストの下の余白
+highlight NonText ctermbg=none
+" 行番号
+highlight LineNr ctermbg=none
+" コマンド折りたたみ
+highlight Folded ctermbg=none
+" ファイルの終わり以降の空白
+highlight EndOfBuffer ctermbg=none
 " ダーク系のカラースキームを使う
 "set background=dark
 
@@ -96,56 +130,33 @@ endif
 "inoremap <Down> <Nop>
 "inoremap <Left> <Nop>
 "inoremap <Right> <Nop>
+" jjでESｃ
+inoremap <silent> jj <ESC>
+" insert mode でも hjklで移動
+imap <C-j> <Down>
+imap <C-k> <Up>
+imap <C-h> <Left>
+imap <C-l> <Right>
 
-"---------------------------
-" Start Neobundle Settings.
-"---------------------------
-" bundleで管理するディレクトリを指定
-set runtimepath+=~/.vim/bundle/neobundle.vim/
+"BackSpace Delete設定
+"imap <C-u> <BS>
+"imap <C-i> <Del>
 
-" Required:
-call neobundle#begin(expand('~/.vim/bundle/'))
+"現在行の下に空行を挿入
+"imap <C-o> <ESC>o
 
-" neobundle自体をneobundleで管理
-NeoBundleFetch 'Shougo/neobundle.vim'
+"--------------------------
+"emmet の設定
+let g:user_emmet_leader_key = '<c-e>'
+let g:user_emmet_settings = {
+\   'variables' : {
+\   'lang': "ja"
+\   }
+\}
+"-------------------------
 
-" 今後このあたりに追加のプラグインをどんどん書いて行きます！！"
-
-" NERDtreeを設定
-NeoBundle 'scrooloose/nerdtree'
-
-" autocloseを設定
-" NeoBundle 'Townk/vim-autoclose'
-
-" カラースキームmolokai
-NeoBundle 'tomasr/molokai'
-"-------------------------------------
-" molokaiの設定
-if neobundle#is_installed('molokai') " molokaiがインストールされていれば
-    colorscheme molokai " カラースキームにmolokaiを設定する
-endif
-
-set t_Co=256 " iTerm2など既に256色環境なら無くても良い
-syntax enable " 構文に色を付ける
-"------------------------------------
-
-" 末尾の全角と半角の空白文字を赤くハイライト
-NeoBundle 'bronson/vim-trailing-whitespace'
-
-" インデントの可視化
-NeoBundle 'Yggdroot/indentLine'
-
-"Emmet
-NeoBundle 'mattn/emmet-vim'
-call neobundle#end()
-
-" Required:
 filetype plugin indent on
 
-" 未インストールのプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定
-" 毎回聞かれると邪魔な場合もあるので、この設定は任意です。
-NeoBundleCheck
- 
 "-------------------------
-" End Neobundle Settings.
-"-------------------------
+"<C-y>で拡張子に応じたコマンドを自動打ち込み、エンターで実行
+autocmd BufNewFile,BufRead *.py nnoremap <C-y> :!python3 %
